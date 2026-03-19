@@ -1475,3 +1475,200 @@ Best for full page design.
 
 
 </details>
+
+<!-- -----------------------------------------------Size Unit------------------------------------------------------ -->
+
+
+<details>
+  <summary><b>Size Unit</b></summary>
+
+  # Units in CSS
+
+## 1. Absolute Units (Fixed Size)
+
+These units do not change based on screen or parent.
+
+**Common ones:**
+- `px` (pixels)
+- `cm`, `mm`, `in` (rarely used)
+
+**Example:**
+```css
+.box {
+  width: 200px;
+}
+```
+
+👉 Always 200 pixels, no matter screen size.
+
+### When to use:
+- Borders
+- Small fixed UI elements
+
+### Problem:
+- Not responsive
+- Looks bad on different devices
+
+## 2. Relative Units (Flexible Size)
+
+These units depend on something else (parent, screen, or font size).
+
+### a) Percentage `%`
+*Relative to parent element*
+```css
+.parent {
+  width: 400px;
+}
+.child {
+  width: 50%;
+}
+```
+👉 Child = 200px (50% of parent)
+
+**Key idea:**
+- Always depends on parent size.
+
+# CSS Units Explained
+
+## b) em
+
+*Relative to parent's font-size*
+
+```css
+.parent {
+  font-size: 20px;
+}
+
+.child {
+  font-size: 2em;
+}
+```
+
+👉 Child = 40px
+
+### Problem:
+- Keeps multiplying (can get messy in nested elements)
+
+---
+
+## c) rem (IMPORTANT)
+
+*Relative to root (html) font-size*
+
+```css
+global {
+  font-size: 16px;
+}
+
+.box {
+  font-size: 2rem;
+}
+```
+
+👉 2 × 16 = 32px
+
+### Why better than em:
+- No compounding problem
+- Predictable
+
+---
+
+## d) vw (viewport width)
+
+*Relative to screen width*
+
+```css
+div {
+  width: 50vw;
+}
+```
+
+👉 50% of screen width
+
+---
+
+# CSS Units and Practical Examples
+
+## e) vh (viewport height)
+
+**Relative to screen height**
+
+```css
+.box {
+  height: 100vh;
+}
+```
+
+👉 **Full screen height**
+
+## f) vmin and vmax
+- `vmin` → smaller of width/height
+- `vmax` → larger of width/height
+
+## 3. Practical Examples
+- **Full screen section:**
+  ```css
+  .section {
+    height: 100vh;
+  }
+  ```
+- **Responsive text:**
+  ```css
+  h1 {
+    font-size: 3rem;
+  }
+  ```
+- **Flexible layout:**
+  ```css
+  .container {
+    width: 80%;
+  }
+  ```
+
+## 4. When to Use What?
+| Situation | Best Unit |
+| --- | --- |
+| Fixed size | px |
+| Layout width | % |
+| Font size | rem |
+e.g., Full screen | vh / vw |
+e.g., Scalable UI | rem |
+
+
+# 5. Common Mistakes (IMPORTANT)
+
+- ❌ Using only `px`
+
+  → Layout breaks on mobile
+
+- ❌ Using `em` everywhere
+
+  → Sizes become unpredictable
+
+- ❌ Forgetting parent dependency in `%`
+  ```css
+  .child {
+    height: 50%;
+  }
+  ```
+
+  👉 Won’t work if parent has no height
+
+- ❌ Misusing `vh` on mobile
+
+  Mobile browsers change height dynamically.
+
+  Can cause layout jump.
+
+# 6. Key Takeaways
+
+- `px` = fixed, not responsive.
+- `%` = depends on parent.
+- `em` = depends on parent font-size.
+- `rem` = depends on root (best for fonts).
+- `vw/vh` = depends on screen.
+
+
+</details>
+
+
