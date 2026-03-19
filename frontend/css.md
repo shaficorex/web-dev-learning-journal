@@ -273,6 +273,8 @@ Most margin bugs come from:
 
 </details>
 
+<!-- --------------------------------------------box model------------------------------------------------------- -->
+
 
 <details>
   <summary><b>Box model</b></summary>
@@ -440,6 +442,8 @@ Think like this every time:
 - Actual stuff → `content`
 </details>
 
+<!-- ------------------------------------------------display------------------------------------------------------ -->
+
 
 <details>
   <summary>Display concepts</summary>
@@ -576,6 +580,7 @@ If layout is breaking, check:
 - Does it allow width/height?
 </details>
 
+<!-- ------------------------------------------------position------------------------------------------------------- -->
 
 
 <details>
@@ -773,6 +778,7 @@ and expect it to stick inside parent…
 ```
 </details>
 
+<!-- ------------------------------------------------flex------------------------------------------------------- -->
 
 <details>
   <summary><b>Flex</b></summary>
@@ -1088,5 +1094,384 @@ If all:
 - Main axis vs cross axis is the core idea.
 - `justify-content` and `align-items` are the most used properties.
 - `flex: 1` is commonly used for equal spacing.
+
+</details>
+<!-- ------------------------------------------------grid------------------------------------------------------- -->
+<details>
+  <summary><b>Grid</b></summary>
+
+  # CSS Grid
+
+CSS Grid is a 2D layout system.
+That means you control **rows AND columns** at the same time (unlike Flexbox, which is mostly 1D).
+
+## 1. Core Idea
+
+You create a grid container, and inside it you have grid items.
+
+```css
+.container {
+  display: grid;
+}
+```
+
+- **Parent:** → grid container
+- **Children:** → grid items
+
+## 2. Define Columns and Rows
+
+You explicitly define the structure.
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 200px 200px 200px;
+  grid-template-rows: 100px 100px;
+}
+```
+
+👉 This creates:
+- **3 columns** → each `200px`
+- **2 rows** → each `100px`
+
+## 3. Fraction Unit (`fr`) — Important
+
+Instead of fixed pixels, use `fr` (fraction of available space):
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+```
+
+👉 Meaning:
+divide space into **3 equal parts**
+
+Example:
+```css
+grid-template-columns: 1fr 2fr 1fr;
+```
+👉 The middle column is double size.
+
+# 4. Gap (Space Between Items)
+
+```css
+.container {
+  gap: 10px;
+}
+```
+
+Adds space between rows and columns.
+
+*Cleaner than margin.*
+
+# 7. Repeat Function (Clean Code)
+
+Instead of writing again and again:
+
+```css
+grid-template-columns: repeat(3, 1fr);
+```
+
+👉 Same as:
+
+```plaintext
+1fr 1fr 1fr
+```
+
+# 9. Alignment
+
+## Horizontal (inside grid)
+- `justify-items: center;`
+
+## Vertical
+- `align-items: center;`
+
+## Full control
+- `place-items: center;`
+
+---
+
+<details>
+  <summary><h2>Placing Items</h2></summary>
+
+    **By default:**
+
+Grid auto places items from left to right, top to bottom.
+
+# Grid Layout and Lines
+
+## 1. Grid is NOT boxes — it is LINES
+
+When you create a grid:
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+```
+
+You don’t get just 3 columns — you get 4 vertical lines:
+
+| Line 1 | Line 2 | Line 3 | Line 4 |
+
+Think of it like this:
+- Column 1 → between line 1 and line 2
+- Column 2 → between line 2 and line 3
+- Column 3 → between line 3 and line 4
+
+> **VERY IMPORTANT:**
+> You place items using lines, not columns.
+
+---
+
+## 2. Understanding `grid-column`
+
+```css
+.item {
+  grid-column: 1 / 3;
+}
+```
+
+**This means:**
+- Start at line **1**
+- End at line **3**
+
+Visually:
+
+| Line 1 | Line 2 | Line 3 | Line 4 |
+
+↑-----------------↑
+
+*The item spans from line 1 to line 3*
+does cover:
+the following columns:
+- Column spanning from line **1** to **2** (Column 1)
+- Column spanning from line **2** to **3** (Column 2)
+
+> **That’s why it spans two columns.**
+
+---
+
+## Same logic applies for rows:
+```css
+.item {
+   grid-row: 1 / 3;
+}
+```
+does the same for rows:
+does start at row line **1**, end at row line **3**, covering two rows.
+
+# 4. grid-area (shortcut)
+
+```css
+.item {
+  grid-area: 1 / 1 / 3 / 3;
+}
+```
+
+**Format:**
+
+`row-start / column-start / row-end / column-end`
+
+👉 **So this means:**
+
+- **Row:** 1 → 3 (2 rows)
+- **Column:** 1 → 3 (2 columns)
+
+👉 **Final result:** a 2×2 block
+
+---
+
+# 5. Why "end before"?
+
+Because grid uses lines, not boxes.
+
+If you say:
+
+```css
+grid-column: 1 / 3;
+```
+
+👉 It stops AT line 3, not including beyond it.
+
+Same idea as array slicing:
+
+`[1, 3)` // includes 1, excludes 3
+
+
+# 6. Auto Placement (default behavior)
+
+**If you don’t write anything:**
+
+```html
+<div class="container">
+  <div>1</div>
+  <div>2</div>
+  <div>3</div>
+</div>
+```
+
+👉 **Grid will place like this:**
+
+| 1 | 2 | 3 |
+|---|---|---|
+
+**Next row if needed:**
+
+| 4 | 5 | 6 |
+|---|---|---|
+
+👉 **Direction = left → right, then next row**
+
+## 7. Now the hardest part: auto-fit + minmax
+`grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));`
+
+### Break it properly:
+
+**Step 1: `minmax(200px, 1fr)`**
+
+👉 Each column:
+- Minimum = **200px**
+- Maximum = can grow (**1fr**)
+
+**Step 2: `auto-fit`**
+
+👉 Browser decides:
+"How many columns can I fit if each needs at least **200px**?"
+
+### Example:
+- Screen width = **1000px**
+- Each item min = **200px**
+- Calculation: `1000 / 200 = 5 columns`
+
+# Grid Explanation
+
+👉 **Initial grid setup:**
+
+```
+[200][200][200][200][200]
+```
+
+*If extra space exists, they expand to:*
+
+```
+[1fr][1fr][1fr][1fr][1fr]
+```
+
+👉 **They stretch equally**
+
+*Responsive behavior when the screen shrinks (e.g., screen width = 500px).*
+
+# Rule is simple:
+
+- Each item **CANNOT** be smaller than 200px
+- Browser tries to fit as many as possible in one row
+
+## Scenario:
+- Now screen = 500px
+- Available width = 500px
+- Each item needs at least = 200px
+
+## Step 1: Try to fit items in ONE row
+- Try 3 items:
+  - `200 + 200 + 200 = 600px` ❌ (too big)
+  - Not possible.
+
+## Step 2: Try 2 items
+- `200 + 200 = 400px` ✅
+- ✔ Fits inside 500px
+
+## Step 3: What about remaining space?
+- `500 - 400 = 100px` extra
+- Because of `1fr`, items expand.
+- So instead of 200px, they become:
+    - `250px + 250px = 500px`
+
+
+# Final Layout
+
+```
+[item] [item]   ← first row
+[item] [item]   ← second row (remaining items go down)
+```
+
+👉 **NOT** because you asked for 2 rows
+👉 **Because only 2 items can fit per row**
+
+## Key Understanding (This is the core)
+
+👉 Grid is doing this:
+
+> "How many items can I fit in one row WITHOUT breaking the minimum size?"
+
+**Answer:** 2
+
+> So it automatically wraps to next line.
+
+## Real-life Analogy
+
+Think of books on a shelf:
+- Each book = 200px wide
+- Shelf = 500px wide
+
+You try placing books:
+- 3 books → doesn’t fit
+- 2 books → fits
+- So next books go to next shelf (row)
+
+</details>
+
+---
+
+
+# 11. Mental Model (Very Important)
+
+Think like this:
+
+- 👉 You are drawing a table/grid system first
+- 👉 Then placing items inside it
+
+# 12. Common Mistakes
+
+- Forgetting `display: grid`
+- Confusing `fr` with `%`
+- Using margin instead of gap
+- Not understanding start/end lines
+- Mixing Grid and Flex without clear purpose
+
+# 13. Grid vs Flex (Quick)
+
+| Feature | Grid | Flexbox |
+|---------|-------|---------|
+| Dimension | 2D (row + col) | 1D |
+| Control | Layout-first | Content-first |
+| Use case | Page layout | Components |
+
+# Final Understanding
+
+**Grid = layout system**
+
+You define structure first, then place items precisely.
+
+Best for full page design.
+
+
+# auto-fit vs auto-fill (quick)
+
+- **auto-fit** → removes empty columns, stretches items
+- **auto-fill** → keeps empty columns (can create gaps)
+
+👉 **Use auto-fit 90% of the time**
+
+## Final Simple Summary
+
+- Grid works on lines, not boxes
+- `1 / 3 =` span 2 columns (line-based thinking)
+- `grid-area` = shorthand for row + column
+- `auto-fit + minmax` = responsive grid without media queries
+
 
 </details>
