@@ -1,7 +1,7 @@
 <details>
     <summary><b>Hand Note</b></summary>
 
-    ```html
+```html
     <!DOCTYPE html>
 <html lang="en">
 
@@ -133,7 +133,8 @@ value → what user types -->
 </body>
 
 </html>
-    ```
+
+```
 </details>
 
 
