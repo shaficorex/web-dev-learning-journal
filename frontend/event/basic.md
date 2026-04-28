@@ -1,3 +1,142 @@
+<details>
+    <summary><b>Hand Note</b></summary>
+
+    ```html
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body id="bd">
+    <h1>dom doma dom event</h1>
+    <!-- way 1 for event handeling -->
+    <!-- if we write on then we will get so many event attribute suggestion
+    if we click 7 will be the output -->
+    <button onclick="console.log(7)">click me</button>
+    <!-- inside "" double quate we habe to use single quate '', or we can do alternate like using '' inside "" -->
+    <button onclick="console.log('hi how are you')">get string</button>
+
+    <br>
+
+    <!-- way 2 for event handeling -->
+    <!-- we can put a function call inside event atribute value, that means when an event will hapen you will call this function -->
+    <button onclick="bgBlue()">change bg</button>
+    <!-- we can write this script in different file and make a connecction -->
+    <script>
+        function bgRed() {
+            document.getElementById("bd").style.backgroundColor = "red";
+        }
+
+        function bgBlue() {
+            document.getElementById("bd").style.backgroundColor = "blue";
+
+        }
+    </script>
+
+    <!-- way 3 -->
+    <br>
+    <button id="btn-bg-green">way 3</button>
+    <script>
+        const btnBgGreen = document.getElementById("btn-bg-green");
+        btnBgGreen.onclick = function () {
+            document.getElementById("bd").style.backgroundColor = "green";
+        }
+    </script>
+
+
+    <!-- way 4 addEventListener -->
+    <!-- ebst practise -->
+    <br>
+    <button id="btn-make-purple">bg purple</button>
+
+    <script>
+        // document.getElementById("btn-make-purple").addEventListener("event type",handler function)
+        //note: here event name will be without on
+        document.getElementById("btn-make-purple").addEventListener("click",
+            function () {
+                document.getElementById("bd").style.backgroundColor = "purple";
+            }
+        )
+    </script>
+
+    <!-- try to change h1 text by click event -->
+
+    <br>
+    <br>
+    <br>
+    <p id="name-area">No Name</p>
+    <input id="input-name" type="text" placeholder="your name"> <button id="btn-change-name">change name</button>
+
+    <script>
+        document.getElementById("btn-change-name").addEventListener("click",
+            function () {
+                //get input value
+                const inputName = document.getElementById("input-name").value;
+                //change name
+                document.getElementById("name-area").innerText = inputName;
+
+            }
+        )
+    </script>
+
+    <!-- innerText → what user sees
+value → what user types -->
+
+    <br>
+    <br>
+    <br>
+
+    <h1>my secret code</h1>
+    <input id="secreet-code" type="text">
+    <button id="btn-delete" disabled>delete</button>
+
+    <script>
+        document.getElementById("secreet-code").addEventListener("keyup",
+            function (event) {
+                // console.log(event);//if i press e it will show all the event: KeyboardEvent {isTrusted: true, key: 'e', code: 'KeyE', location: 0, ctrlKey: false, …}
+                // console.log(event.target); // target will give us where event occoured <input id="secreet-code" type="text"> 
+                // //now if we do value we will get what we have typed
+                // console.log(event.target.value);
+
+                const text = event.target.value;
+                const btnDelete = document.getElementById("btn-delete");
+                if (text === "delete") {
+                    console.log("delete typed");
+                    btnDelete.removeAttribute("disabled");
+                }
+                else {
+                    console.log("something else");
+                    btnDelete.setAttribute("disabled",true);
+                }
+            }
+        )
+    </script>
+
+
+<!-- event bubbling:
+ when any event triggers then browser start to find it from top to bottom means html->body->section->ol->li
+ 
+ step2: when browser finds the target the event occure
+ step3: now it will go on top and if on the way it gets any eventhandler it will triggers it
+ 
+ we can do event.stopPropagation and event.stopImmediatePropagation for stop bubbling-->
+
+
+ <!-- event deligation
+  need to leran it in details way -->
+
+
+</body>
+
+</html>
+    ```
+</details>
+
+
 # Event Handling in JavaScript
 
 ## Concept Overview
