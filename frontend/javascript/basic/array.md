@@ -1,3 +1,70 @@
+<details>
+    <summary><b>Hand Note</b></summary>
+
+```js
+
+Javascript array
+
+Array is a object of class in javascript, that is why we can store different type of data inside an array
+
+const num = [1, 2, 3, 4, 5, 6];
+const mixedArray = [1, 2, "banana","rafiq", true,"banana","water", 1.4];
+
+console.log(mixedArray[2]);
+mixedArray[1] = 1000;
+
+console.log(num.length);
+
+num.push(100, 200, 300);
+const outLast=num.pop(); //it will pop from last and store it inside out, if no element insoide array it will return undefine. that means after poping it will return what it has popped
+console.log(outLast);
+
+const outFirst = num.shift(); //same as pop , but pop from front
+console.log(outFirst);
+
+num.unshift(5000, 6000, 70000);//it will push at front
+console.log(num);
+
+console.log(mixedArray.includes("water"));//true print, includes() checks the elementis inside the array or not 
+//best for ifelse condition
+if (mixedArray.includes("water"))
+{
+    console.log("water found");
+}
+
+console.log(mixedArray.indexOf("banana"));//checks from 0 to last for the element, if duplicate then return the first index
+console.log(mixedArray.indexOf("apple")); //if no element like that then return -1
+
+const val = 12;
+console.log(Array.isArray(num));// true
+console.log(Array.isArray(val));// false. we use it to check weather a variable is array or not
+
+console.log(num.slice(1, 5));//1 to 4 index
+
+
+console.log(num.concat(mixedArray)); //to concate two array. firstarray.concat(secondarray)
+
+console.log(num.splice(4, 3));//it will remove 3 element from index 4 inclusive
+console.log(num);
+
+
+
+let arr = [3, 2, 4, 56, 7, 8, 99];
+console.log(arr.join('|'));//3|2|4|56|7|8|99
+//it will add all the element from an array with a specefire and make it a string
+
+
+console.log(arr.reverse());// to reverse an arrray.
+//or we can use a new array and unshift. or we can run the llop from last
+
+
+//sort 
+//javascript sort by alphabatical order like strin . in number ass well. i will learn later hot ro sort number in javascript
+
+```
+</details>
+
+
 # JavaScript Arrays
 
 ## Concept Overview
