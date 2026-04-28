@@ -1,3 +1,70 @@
+<details>
+  <summary><b>Hand Note</b></summary>
+
+```js
+
+JavaScript string
+
+const country = 'bangladesh';
+const div = "kushtia";
+const post = `kuala`;
+const city = new String('vapee');//htis is an object type
+
+console.log(city);
+//we can not do div[1]='B';  because string is immutable
+
+const sub = "ChemisTRy";
+const book = "chemisTry";
+
+console.log(sub == book);//false
+console.log(sub.toLowerCase() === book.toLowerCase());//true
+console.log(sub.toUpperCase() == book.toUpperCase());//true
+//for string comparims we should use toUpperCase or toLowerCase methode
+
+
+const sub1 = "water   ";
+const sub2 = "        water   ";
+console.log(sub1 === sub2);  //true
+console.log(sub1.trim() === sub2.trim());//false
+//trim() removes the white space from front and back area
+
+
+const word = "howareyou";
+console.log(word.slice(2, 5)); //war
+
+const sen = "i do not like coding";
+console.log(sen.split(" "));//[ 'i', 'do', 'not', 'like', 'coding' ]
+console.log(sen.split('o'));//[ 'i d', ' n', 't like c', 'ding' ]
+//split the string using cutting point and put into an array
+
+const newarr = ['i', 'do', 'not', 'like', 'coding'];
+console.log(newarr.join('-'));//i-do-not-like-coding
+////join the array using cutting point and put into an string
+
+
+//reverse string in three different way
+
+const name = "donaltrump"
+let reverse = "";
+for (const ele of name)
+{
+    reverse = ele + reverse;
+}
+console.log(reverse);
+
+//take forloop but start from last and use decremental
+
+//shortcut
+const gret = "highhowareyou";
+let rev = gret.split("").reverse().join("");//we can only use reverse in array not in string
+console.log(rev);
+//split give letter by letter and put in a array--> as array so we can use reverse-->now join joins it and put in a string
+
+```
+</details>
+
+
+
 # JavaScript Strings
 
 ## Concept Overview
