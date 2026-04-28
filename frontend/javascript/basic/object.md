@@ -1,3 +1,95 @@
+<details>
+  <summary><b>Hand Note</b></summary>
+
+```js
+
+Object
+
+const student = {
+    name: "shafi",
+    id: 123,
+    subject: ["bangla", "english", "math"],//do not do subject=["bangla", "english", "math"]
+    isPassed:true,
+    gpa: 4.57,
+    "fav places": ["cardiff", "ponty"],
+    appearance: {// bested object
+        hair: "black",
+        height: 78,
+        face: {
+            shape: "round",
+        }
+    },
+
+    act: function () { // we can declare a function inside an opbject
+        console.log("he is a good student");
+    }
+}
+
+//three ways to get property from a object
+console.log(student);
+console.log(student.id);
+
+const stuName = student.name;
+console.log(stuName);
+
+console.log(student["isPassed"]);
+console.log(student["fav places"]); //we can not do console.log(student.fav places);
+const keyName = "fav places";
+console.log(student[keyName]);
+
+
+//the way we are accessing property we can change like that as well
+student.gpa = 3.50;
+student["fav places"].push("trimance");
+console.log(student["fav places"]);
+
+//to get the keys
+const getKeys = Object.keys(student);
+console.log(getKeys);
+
+//to get all the valus
+const getValues = Object.values(student);
+console.log(getValues);
+
+//to get nested object
+console.log(student.appearance.face.shape);//round
+//we can modify the nested object as well
+
+//to delete a property
+delete student.id;
+console.log(Object.keys(student));
+
+
+//loop on an object
+for (const key in student)// for array we use of , for object we use in. it will return one by one key.
+{
+    console.log(student[key]);//we have to use [] to acces, not dot
+}
+
+//two different way to declare object
+const pencil = new Object();//way 1
+const pen = Object.create({}); //way 2
+console.log(pen);
+
+
+student.act();// student.act means we got the function . () means we are calling it
+
+
+//we can put object inside an array as well
+
+const arr = [
+    {name:"shafi",roll:345,isPassed:false},
+    {name:"holand",roll:678,isPassed:false},
+    {name:"shafi",roll:345,isPassed:false}
+]
+console.log(arr[1]);
+
+
+```
+</details>
+
+
+
 # JavaScript Objects
 
 ## Concept Overview
