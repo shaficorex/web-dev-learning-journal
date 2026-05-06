@@ -1,3 +1,248 @@
+<details>
+    <summary><b>Hand Note</b></summary>
+
+        // console.log('hello from js');
+
+// const person = {
+//     name: 'shafi',
+//     id: 123445,
+//     isRich: false,
+//     friends:['rahim','karim','ratul']
+// }
+// console.log(person); //{name: 'shafi', id: 123445, isRich: false, friends: Array(3)}
+
+// const personJson = JSON.stringify(person);
+// console.log(personJson); //{"name":"shafi","id":123445,"isRich":false,"friends":["rahim","karim","ratul"]}
+// console.log(typeof personJson);//string.. that means JSON.stringify() converts object into string and put key value inside "" notation except number and boolian , also seperate key value using a comma
+
+// const parseJson = JSON.parse(personJson);
+// console.log(parseJson);//{name: 'shafi', id: 123445, isRich: false, friends: Array(3)}
+// console.log(typeof parseJson);//object
+// //that means JSON.parse() converts a json(javascript object notation) string into object 
+
+
+// const result = fetch('https://jsonplaceholder.typicode.com/todos/1');
+// console.log(result);// Promise {<pending>}[[Prototype]]: Promise[[PromiseState]]: "fulfilled"[[PromiseResult]]: Response
+// // we can access data using a link using fetch() function. it returns a promise in object formate, that means wait for a moment i will give you data
+
+// fetch('https://jsonplaceholder.typicode.com/todos/1')
+//     .then((respon) => console.log(respon));//if we wait for any promiss data and after that if we use .then()
+// // that means what ever response will be given will store respon parameter
+
+
+// fetch('https://jsonplaceholder.typicode.com/todos/1')
+//     .then((respon) => console.log(respon.json()));// if we want to convert that response data into json then it also give us a promiss, that means we have to use .then() function to know what kind of data it gave me
+
+// fetch('https://jsonplaceholder.typicode.com/todos/1')
+//     .then((respon) => respon.json())
+//     .then((data) => console.log(data));//.json() function give us data in object format
+
+
+// fetch('https://jsonplaceholder.typicode.com/todos/1')
+//     .then(response => response.json())
+//     .then(json => console.log(json))
+
+
+// const loadData = () => {
+//     fetch('https://jsonplaceholder.typicode.com/todos/1')
+//         .then((respon) => respon.json())
+//         .then((data) => console.log(data));
+// }
+
+
+// const url = 'https://jsonplaceholder.typicode.com/posts';
+// const loadPost = () => {
+//     fetch(url)
+//         .then((res) => res.json())
+//         .then((data) => displayPost(data));
+
+// }
+
+// //get parent
+// const postParent = document.getElementById("postList");
+
+
+// const displayPost = (posts) => {
+//     postParent.innerHTML = "";
+//     posts.forEach(element => {
+//         //create element
+//         let li = document.createElement("li");
+//         li.innerText = element.title;
+//         //append to parent
+//         postParent.appendChild(li);
+//     });
+// }
+
+
+// "userId": 1,
+//     "id": 1,
+//         "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+//             "body": "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto"
+// },
+
+
+// const loadPost = () => {
+//     const url = 'https://jsonplaceholder.typicode.com/posts';
+
+//     const postContainer = document.getElementById("post-container");
+//     postContainer.innerHTML = "";
+
+
+//     fetch(url)
+//         .then((res) => res.json())
+//         .then((posts) => {
+//             for (let ele of posts) {
+//                 const card = document.createElement("div");
+//                 card.innerHTML =
+//                     `
+//                     <div class="card">
+//                         <h2>${ele.title}</h2>
+//                         <p>${ele.body}</p>
+//                     </div>
+//                     `
+
+//                 postContainer.append(card);
+//             }
+
+//         })
+// }
+
+//need to learn conditional rendaring
+
+/*
+GET methode: to get execting data from database
+if we want to get whole data:
+etch('https://jsonplaceholder.typicode.com/posts') // we will get all data
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+
+
+if we want to get one data element we just need to do ..../posts/id number:
+etch('https://jsonplaceholder.typicode.com/posts/7') //we will getn number 7 id data
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+*/
+
+
+/*
+POST methode: send data from client side to server side:
+
+fetch('https://jsonplaceholder.typicode.com/posts', { // we want to send data inside this link
+  method: 'POST',       //this methode name will be constant
+  body: JSON.stringify({  // we have to send object, but before sending we have to convert it into json format
+    title: 'foo',       // we will just change this body section to send our custome data
+    body: 'bar',
+    userId: 1,
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8', this header section will be constenet
+  },
+})
+  .then((response) => response.json()) //. to get data we will use these two line
+  .then((json) => console.log(json));
+
+  output:
+  {
+  id: 101,
+  title: 'foo',
+  body: 'bar',
+  userId: 1
+}
+*/
+
+/*
+DELETE method: just we need to add the id number which one we want to DELETE:
+
+fetch('https://jsonplaceholder.typicode.com/posts/6', { //id 6 will be deleted
+  method: 'DELETE',
+});
+
+*/
+
+/*
+data edit PATCH methode: we need to add the id last of the link and change inside body what we want to update:
+//rest of the thing will be same as POST method
+
+
+fetch('https://jsonplaceholder.typicode.com/posts/7', { // if database does not find id 7 data it does not do anything , but if gets then change it
+  method: 'PATCH',
+  body: JSON.stringify({
+    title: 'data changed',
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+})
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+
+*/
+
+/*
+data edit PUT method:we need to add the id last of the link and change inside body what we want to update:
+
+fetch('https://jsonplaceholder.typicode.com/posts/9', { //here if database does not get id 9 then it will create id 9 and change. here is the difference between PATCH and PUT
+  method: 'PUT',
+  body: JSON.stringify({
+    id: 9,
+    title: 'foo',
+    body: 'bar',
+    userId: 1,
+  }),
+  headers: {
+    'Content-type': 'application/json; charset=UTF-8',
+  },
+})
+  .then((response) => response.json())
+  .then((json) => console.log(json));
+
+*/
+
+
+/*
+HTTP status code:
+200:ok
+301:moved permanently
+302:moved temporarilly
+404:not found
+500:internal server error
+503: service unavaiable
+*/
+
+
+//Async and Await
+
+// fetch('https://jsonplaceholder.typicode.com/posts/1')
+//     .then((response) => response.json())
+//     .then((json) => console.log(json));
+
+// console.log("hi");
+// console.log(true);
+
+// here we are not getting data serial by serial. getting first hi then true then fetching data
+//because it takes time to fetch data so browser excute first whatever will take less time .
+
+//we can make it syncronise
+
+const makeSyn = async() => { //we are making this function asyncronus so we have to declare it async
+
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts/1');// it promiss us to give data so it will take time so we have to use await
+    //it means wait here untill you get the data
+    console.log("hi");
+
+    const json = await res.json(); //same reson to use await
+    console.log(json);
+
+    console.log(true);
+
+    // now we will get hi then json data then true
+}
+makeSyn();
+    
+</details>
+
+----
+
 # JavaScript JSON, Fetch API, and Async/Await 
 
 ## Concept Overview
