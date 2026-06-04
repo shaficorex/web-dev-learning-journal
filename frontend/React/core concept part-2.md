@@ -241,510 +241,324 @@ function Friend({user})
 
 
 
-# Event Handling in React
+# Event Handling
 
-## What is Event Handling?
+In most cases, event handler functions are written above the return statement inside a component.
 
-An event means something happening in the browser.
+## Basic Event Handling
+- Event names are written in camelCase.
+- The function must be passed inside `{}`.
+- Do not call the function directly. Pass the function reference.
 
-### Examples:
-- User clicks button
-- User types in input field
-- User submits form
-- User moves mouse
-
-React allows us to respond to these events using functions.
-
-## Basic Structure
 ```jsx
 function App() {
+  const [count, setCount] = useState(0);
+
   const handleClick = () => {
     alert("clicked");
-  }
+  };
+
   return (
-    <button onClick={handleClick}>
-      Click Me
-    </button>
-  )
+    <>
+      <section id="center">
+        <h1>react+vite</h1>
+        <button onClick={handleClick} className="btn">
+          Click Me
+        </button>
+      </section>
+    </>
+  );
 }
 ```
 
-## Very Important Understanding
-This line:
-```jsx
-onClick={handleClick}
-```
-does **NOT** call the function immediately.
-
-Instead:
-- React stores the function reference.
-- Then later, when the user clicks the button, React calls the function.
-
-## Real Flow Internally
-When React sees:
-```jsx
-<button onClick={handleClick}>
-```
-it basically remembers:
-> "If this button gets clicked, run handleClick function."
-Nothing runs immediately.
-Only after clicking:
-handleClick()
-takes place internally by React.
-
-
-# Why handleClick() is Wrong
+# Passing Parameters to Event Handlers
 
 If you write:
 
 ```jsx
-onClick={handleClick()}
+onClick={handleClick(5)}
 ```
 
-then JavaScript executes the function immediately during rendering.
+The function will execute immediately during rendering, before the button is clicked.
 
-**Meaning:**
-
-`handleClick()` runs **BEFORE** the button appears.
-
-That is why an alert appears automatically without clicking.
-
-## Simple Mental Model
-
-### Correct
+To pass parameters, wrap the function call inside an arrow function:
 
 ```jsx
-onClick={handleClick}
+onClick={() => handleClick(5)}
 ```
 
-**Meaning:**
+## Example:
 
-"React, call this later."
-
-### Wrong
-
-```jsx
-onClick={handleClick()}
-```
-
-**Meaning:**
-
-"Run this **NOW**."
-
-## Why Event Names Use camelCase
-
-### HTML:
-- `onclick`
-
-### React:
-- `onClick`
-
-Because JSX is closer to JavaScript than HTML.
-JavaScript naming convention uses camelCase.
-
-## Examples:
-- `onClick`
-- `onMouseMove`
-- `onChange`
-- `onSubmit`
-
-
-# Passing Parameters in Event Handler
-
-## Problem
-
-Suppose:
-
-```javascript
-const handleClick = (num) => {
-  alert(num);
-}
-```
-
-Now you want to send `10`.
-
-You may think:
-
-```jsx
-onClick={handleClick(10)}
-```
-
-But this is wrong.
-
-## Why Wrong?
-
-Because:
-
-```javascript
-handleClick(10)
-```
-
-e executes immediately during rendering.
-
-So alert appears instantly.
-
-## Correct Solution
-
-```jsx
-onClick={() => handleClick(10)}
-```
-
-## Deep Explanation of Arrow Function Here
-
-This part:
-
-```jsx
-() => handleClick(10)
-```
-
-g creates a **NEW FUNCTION**.
-This new function does not run immediately.
-React stores this function.
-After clicking:
-- React calls arrow function 
-- Arrow function calls `handleClick(10)`
-
-# Internal Visualization
-
-## React stores:
-
-```jsx
-() => handleClick(10)
-```
-
-**NOT:**
-
-```jsx
-handleClick(10)
-```
-
-*Huge difference.*
-
----
-
-## 2. Array Destructuring
-
-### What Problem Does Destructuring Solve?
-
-**Without destructuring:**
-
-```javascript
-const arr = [20, 50];
-const first = arr[0];
-const second = arr[1];
-```
-
-*Too much repetitive code.*
-
-### Destructuring Shortcut
-
-```javascript
-const [first, second] = [20, 50];
-```
-
-JavaScript automatically assigns:
-- `first = 20`
-- `second = 50`
-
----
-
-## Visual Understanding
-
-```javascript
-const [a, b] = [100, 200];
-```
-
-Think like:
-- `a` gets the first value (`100`)
-- `b` gets the second value (`200`)
-
----
-
-## Why React Uses Destructuring in useState?
-
-React returns an array:
-```jsx
-[ currentValue, updatingFunction ] 
-```
-Example:
-```jsx
-const [score, setScore] = useState(0);
-```
-Internally React gives something like:
-```jsx
-[0, function]
-```
-and then destructuring happens:
-- `score = 0`
-- `setScore = function`
-
-
-# 3. Deep Understanding of `useState`
-
-## Biggest Concept
-React components normally forget values after re-render.
-
-**State** solves this problem.
-
-## Why Normal Variable Fails
-
-### Example:
 ```jsx
 function App() {
-  let count = 0;
+  const [count, setCount] = useState(0);
 
-  const increase = () => {
-    count++;
-    console.log(count);
-  }
+  const handleClick = (num) => {
+    const newNum = num + 5;
+    alert(newNum);
+  };
 
   return (
-    <button onClick={increase}>
-      Add
-    </button>
+    <> 
+      <section id="center">
+        <h1>react+vite</h1>
+        <button onClick={() => handleClick(10)} className="btn">
+          Click Me
+        </button>
+      </section>
+    </>
   );
 }
 ```
-Console increases.
 
-**BUT UI does not update.**
+# Array Destructuring
 
-### Why?
-Because React does not track normal variables.
+Destructuring allows us to extract values from an array into variables.
 
-## State is Special Memory
-```jsx
-const [count, setCount] = useState(0);
-```
-tReact tracks state variables.
-
-## When state changes:
-React automatically re-renders UI.
-
-## Full Flow of State Update
-Suppose:
-```jsx
-setCount(5);
-```
-tReact does these internally:
-
-### Step 1: Store new value.
-- `count = 5`
-
-### Step 2: Re-run component function.
-- `function App()` runs again.
-
-### Step 3: Generate new JSX.
-
-### Step 4: Compare old UI vs new UI.
-tThis process is called:
-a **Reconciliation**
-
-### Step 5: Update only changed parts in browser.
-
-
-# Why React is Fast
-
-React does **NOT** reload the whole page.
-
-It updates only necessary parts.
-
-## Cricket Example Deep Explanation
-
-```jsx
-const [score, setScore] = useState(0);
+## Way 1
+```javascript
+const [first, second] = [20, 50];
+// first = 20
+// second = 50
 ```
 
-### Initially:
-- `score = 0`
-- UI shows:
-  - `score: 0`
+## Way 2
+```javascript
+const arr = [20, 50];
+const [first, second] = arr;
+// first = 20
+// second = 50
+```
 
-### When Clicking Single:
+## Way 3
+Functions can also be stored inside arrays.
+```javascript
+function greet() {
+  console.log("Hi");
+}
+
+const [first, second] = [100, greet];
+second(); // calls greet()
+```
+
+## Way 4
+Destructuring values returned from a function.
+```javascript
+def dis() {
+  return [200, 400];
+}
+
+const [first, second] = dis();
+console.log(first); // 200
+```
+
+# State Hook (`useState`)
+`useState()` is used to store and update data inside a component.
+
+## Syntax
+```javascript
+const [variable, setVariable] = useState(initialValue);
+```
+- `variable` → current state value 
+- `setVariable` → function used to update the state 
+- `initialValue` → initial state value 
+
+## Example:
 ```jsx
-const handleSingle = () => {
-  const newScore = score + 1;
-  setScore(newScore);
+function Cricket() {
+  const [score, setScore] = useState(0);
+  const [six, setSix] = useState(0);
+
+  const handleSingle = () => {
+    const newScore = score + 1;
+    setScore(newScore);
+  };
+
+  const handleSix = () => {
+    const newSix = six + 1;
+    setSix(newSix);
+
+    const newScore = score + 6;
+    setScore(newScore);
+  };
+
+  return (
+    <div className="student">
+      <h2>Score: {score}</h2>
+      <h3>Sixes: {six}</h3>
+
+      <button onClick={handleSingle} className="btn">
+        Single
+      </button>
+
+      <button className="btn">Four</button>
+
+      <button onClick={handleSix} className="btn">
+        Six
+      </button>
+    </div>
+ );
 }
 ```
 
-Suppose `score` was 0.
-Then:
-- `newScore = 1`
-- Then:
-  - `setScore(1)`
+## Important Note:
+When a state value changes using a setter function (`setScore`, `setSix`), React re-renders the component and displays the updated value.
 
-React updates state.
-Component re-renders.
-Now UI becomes:
-- `score: 1`
 
-## Why Functional Update is Better
+# Loading Data from an API Using fetch
 
-Instead of:
+## Method 1: Using fetch() Directly
+
+### Step 1: Create a Promise
+```javascript
+const fetchUser = fetch(
+  "https://jsonplaceholder.typicode.com/users"
+).then((res) => res.json());
+```
+
+- `fetch()` returns a Promise.
+- `res.json()` converts the response into JavaScript objects.
+
+### Step 2: Wrap the Component with Suspense
 ```jsx
-setScore(score + 1);
+<Suspense fallback={<h3>Loading...</h3>}>
+  <Users fetchUser={fetchUser}></Users>
+</Suspense>
 ```
-better:
+- `fallback` specifies what will be shown while the data is loading.
+- The Promise is passed to the component as a prop.
+
+### Step 3: Use React's use() Function
 ```jsx
-setScore(prev => prev + 1);
-```
+function Users({ fetchUser }) {
+  const users = use(fetchUser);
 
-# Why?
+  console.log(users);
 
-Because state updates can be asynchronous.
-
-React may batch updates together.
-
-Using previous value guarantees correct update.
-
-## Example Problem
-```javascript
-setScore(score + 1);
-setScore(score + 1);
-```
-
-You may expect `+2`.
-
-But often it becomes `+1`.
-
-Because both use the same old value.
-
-## Correct Version
-```javascript
-setScore(prev => prev + 1);
-setScore(prev => prev + 1);
-```
-
-Now the result becomes `+2` correctly.
-
----
-
-# 4. Fetch API Deep Explanation
-
-## What is an API?
-
-An API is a system that provides data.
-
-### Example API:
-
-[https://jsonplaceholder.typicode.com/users](https://jsonplaceholder.typicode.com/users)
-
-This returns fake user data.
-
-## What Fetch Does
-
-```javascript
-fetch(url)
-```
-
-Sends a request to the server.
-
-## Important Understanding
-
-Fetching data takes time because data comes through the internet. So JavaScript does **NOT** stop execution.
-
-Instead:
-- `fetch()` immediately returns a **Promise**.
-
-## What is a Promise?
-
-A Promise means:
-> "I will give result later."
-
-### Three states of a Promise:
-- Pending
-- Resolved
-- Rejected
-
-## Step-by-Step Fetch Flow:
-1. ```javascript fetch('https://jsonplaceholder.typicode.com/users') ```
-2. Browser sends request.
-3. `fetch()` instantly returns a Promise.
-4. JavaScript continues running other code.
-5. When data arrives, the Promise resolves.
-
-## Why `.json()` Is Needed?
-The server sends JSON text, for example:
-```json
-{
-  "name": "Leanne Graham"
+  return (
+    <div className="student">
+      <h1>Users</h1>
+    </div>
+  );
 }
 ```
-`.json()` converts JSON text into a JavaScript object.
+The `use()` function waits for the Promise to resolve and returns the fetched data.
 
-
-
-# Understanding Suspense
-
-## Problem Before Suspense
-
-Initially, data is unavailable.
-
-So React cannot render users immediately.
-
-## Suspense Solution
+# Complete Example
 
 ```jsx
-<Suspense fallback={<h3>loading...</h3>}>
+const fetchUser = fetch(
+  "https://jsonplaceholder.typicode.com/users"
+).then((res) => res.json());
+
+function App() {
+  return (
+    <>
+      <section id="center">
+        <h1>react+vite</h1>
+
+        <Suspense fallback={<h3>Loading...</h3>}>
+          <Users fetchUser={fetchUser}></Users>
+        </Suspense>
+      </section>
+    </>
+  );
+}
+
+function Users({ fetchUser }) {
+  const users = use(fetchUser);
+
+  console.log(users);
+
+  return (
+    <div className="student">
+      <h1>Users</h1>
+    </div>
+  );
+}
 ```
 
-Fallback UI appears while waiting.
+# Loading Data Using Async/Await
 
-Think like:
+## Step 1: Create an Async Function
 
-> "If child component is waiting for async data, show loading text."
+`await` can only be used inside an async function.
 
-## Understanding `use()`
-
-```jsx
-const users = use(userPromise);
-```
-
-`use()` waits for Promise result.
-
-## Internal Idea
-
-- If Promise is unfinished:
-  - React pauses rendering.
-  - Suspense shows fallback.
-- When Promise resolves:
-  - React continues rendering.
-
-## Async Await Deep Understanding
-### Why Async Await Exists
-Promises with `.then()` can become messy.
-Example:
-```js
-af fetch(url)
-  .then(res => res.json())
-  .then(data => console.log(data))
-```
-Async/await makes code look synchronous.
-### Deep Explanation
-```js
+```javascript
 const fetching = async () => {
-  // function body here...
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+
+  return res.json();
+};
+```
+
+## Step 2: Call the Function Inside the Component
+
+Call the async function inside the component and store the returned Promise.
+
+```jsx
+function App() {
+  const userPromise = fetching();
+
+  return (
+    <> 
+      <section id="center">
+        <h1>react+vite</h1>
+        
+        <Suspense fallback={<h3>Loading...</h3>}>
+          <Users userPromise={userPromise}></Users>
+        </Suspense>
+      </section>
+    </>
+  );
 }
 ```
-`async` means:
-> "This function returns a Promise."
-'that means:
-the `await` keyword in an async function does the following:
-defines an asynchronous operation that pauses execution until the Promise resolves, then resumes with the resolved value.
 
+## Step 3: Use the Promise with `use()`
 
+```jsx
+function Users({ userPromise }) {
+  const users = use(userPromise);
 
-# Key Takeaways
+  return (
+    <div className="student">
+      <h1>Users</h1>
+      
+      {users.map((user) => (
+        <Friend key={user.id} user={user}></Friend>
+      ))}
+    </div>
+  );
+}
+```
 
-- React event handlers store function references.
-- `onClick={handleClick}` is different from `onClick={handleClick()}`.
-- Arrow functions delay execution.
-- Destructuring extracts array values cleanly.
-- `useState` creates reactive state.
-- State updates trigger component re-rendering.
-- React updates only changed UI parts.
-- `fetch()` returns a Promise because network requests are asynchronous.
-- Suspense handles loading UI.
-- `use()` waits for Promise data.
-- Async/await simplifies asynchronous code.
+# Display Individual User Data
+
+```jsx
+function Friend({ user }) {
+  const { name, username } = user;
+
+  return (
+    <div className="card">
+      <h3>Name: {name}</h3>
+      <p>Username: {username}</p>
+    </div>
+  );
+}
+```
+
+## Note
+
+- The API returns a property called **username**, not **uname**.
+- Correct destructuring:
+
+```jsx
+const { name, username } = user;
+```
+- Incorrect destructuring:
+
+```jsx
+const { name, uname } = user;
+```
