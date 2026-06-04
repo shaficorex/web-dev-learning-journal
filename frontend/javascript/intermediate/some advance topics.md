@@ -199,365 +199,225 @@ else {
 
 # Some Advanced Concepts
 
-## Concept Overview
+# Primitive vs Non-Primitive Data Types
 
-This section strengthens understanding of JavaScript’s internal behavior, especially type coercion, memory model, and function behavior, which are critical for writing predictable code.
+## Primitive Data Types
 
-### 1. Type Checking (Why `typeof` Fails for Arrays)
-```javascript
-const arr = [1, 2, 3];
+Store the actual value.
 
-typeof arr;          // "object"
-Array.isArray(arr);  // true
-```
-**Why this happens**
-
-Internally, JavaScript does not have a separate “array” type at the `typeof` level. Arrays are implemented as special objects.
-
-So:
-- `typeof []` → "object"
-- This is a language design limitation.
-
-### Correct Mental Model
-- Use `typeof` → for primitives.
-- Use `Array.isArray()` → for arrays.
-
-### 2. `isNaN()` Deep Behavior (Important)
-```javascript
-isNaN("34");     // false
-isNaN("abc");    // true
-isNaN([]);       // false
-```
-**What actually happens internally**
-
-`isNaN(value)` does this:
-1. Convert value → Number
-2. Check if result is NaN
-
-**Examples breakdown:**
-- `Number("34")` → 34 → not NaN → false
-- `Number("abc")` → NaN → true
-- `Number([])` → 0 → false
-- `Number({})` → NaN → true
-
-
-# Explanation of JavaScript Type Conversions and Memory Model
-
-## Why does `[]` convert to `0`?
-- `[].toString()` → `""`
-- `Number("")` → `0`
-
-## Correct Approach
-- Use `Number.isNaN(value);`
-- No conversion needed for strict checks
-
-## Primitive vs Non-Primitive (Memory Model)
-
-### Primitive
 ```javascript
 let a = 10;
 let b = a;
- b = 20;
-```
-- Stored directly in memory
-- `a` and `b` are independent after assignment
 
-### Non-Primitive (Reference Type)
-```javascript
-let arr1 = [1, 2];
-let arr2 = arr1;
+b = 20;
 
-arr2.push(3);
-```
-- Both point to the same memory location
-- Change in one affects the other
-
-### Visualization:
-```
-arr1 ──► [1, 2, 3]
-arr2 ──┘
-```
-**Fix:** Use copy instead of reference:
-```javascript
-let arr2 = [...arr1];
+console.log(a); // 10
+console.log(b); // 20
 ```
 
-# 4. Default Parameters (Why Needed)
+**Primitive types:**
+- Number
+- String
+- Boolean
+- Undefined
+- Null
+- BigInt
+- Symbol
+
+## Non-Primitive Data Types
+
+Store a reference (memory address).
 
 ```javascript
-function add(a, b) {
-    return a + b;
+const arr1 = [1, 2];
+const arr2 = arr1;
+
+ arr2.push(3);
+
+ console.log(arr1); // [1, 2, 3]
+```
+
+**Non-primitive types:**
+- Object
+- Array
+ 
+- Function
+ 
+
+ **Important:** Comparing non-primitive values checks references, not contents.
+
+ ```javascript
+ 
+ {} == {}      // false
+ [] == []      // false
+ ```
+
+ ## Array Checking 
+```javascript
+ const arr = [2, 34, 5, 6];
+ 
+ console.log(Array.isArray(arr)); // true
+ console.log(typeof arr);         // "object"
+ ```
+Note: Arrays are a special type of object in JavaScript.
+
+# isNaN()
+
+Used to check whether a value can be converted into a valid number.
+
+```javascript
+console.log(isNaN(34));       // false
+console.log(isNaN("34"));     // false
+console.log(isNaN("abc"));    // true
+console.log(isNaN({}));       // true
+console.log(isNaN([]));       // false
+```
+
+## Why is `isNaN([])` false?
+
+`Number([])` // 0
+
+Since it becomes a valid number, `isNaN([])` returns false.
+
+## Default Parameters
+
+### Without a default value:
+```javascript
+function add(num1, num2) {
+    console.log(num1 + num2);
 }
-
 add(10); // NaN
 ```
 
-**Why NaN?**
-- `b` is `undefined`
-- `10 + undefined` → **NaN**
-
-## Solution
+### With a default value:
 ```javascript
-function add(a, b = 0) {
-    return a + b;
+def add(num1, num2 = 0) {
+    console.log(num1 + num2);
 }
+add(10); // 10
 ```
 
-## Key Insight
-Default parameters prevent:
-- `undefined`
-- unexpected **NaN**
+### Common default values:
+- Number (addition) -> 0
+- Number (multiply) -> 1
+- String -> ""
+- Array -> []
+- Object -> {}
 
-# 5. Function Types (Execution Difference)
+# Function Declaration vs Function Expression
 
-## Function Declaration (Hoisting)
+## Function Declaration
+
+Can be called before declaration.
+
 ```javascript
-add(2, 3);
+add(5, 8);
 
 function add(a, b) {
     return a + b;
 }
 ```
-**Why it works:**
-- JavaScript moves function declaration to the top during the execution phase.
 
-## Function Expression (No Hoisting)
+## Function Expression
+
+Cannot be called before declaration.
+
 ```javascript
-add2(2, 3); // ERROR
-
-const add2 = function(a, b) {
+const add = function(a, b) {
     return a + b;
 };
+
+add(5, 8);
 ```
-**Why it fails:**
-- `const` is hoisted but not initialized.
-- It exists in the **Temporal Dead Zone (TDZ)**.
 
+## Arrow Functions
 
-# Arrow Function (Key Behavior)
+**Basic structure:**
 
 ```javascript
-const sum = (a, b) => a + b;
+const add = (a, b) => a + b;
 ```
 
-## Important Differences
-- No `this` binding (lexical `this`)
-- Cleaner syntax
-- Needs `return` for multi-line functions
-
-# Spread Operator (Real Understanding)
+**Single parameter:**
 
 ```javascript
-const arr = [1, 2, 3];
-console.log(...arr); // 1 2 3
+const square = x => x * x;
 ```
 
-## What it actually does
-- Breaks iterable into individual elements
-
-## Function Case
-- Example:
-  ```javascript
-  Math.max(...arr);
-  ```
-- Instead of:
-  - `Math.max([1,2,3])` ❌
-  - `Math.max(1,2,3)` ✅
-
-# Copy vs Reference (Critical)
-- Example:
-  ```javascript
-  const a = [1,2];
-  const b = a;        // reference copy
-  const c = [...a];   // value copy
-  ```
-
-# Destructuring (How It Works Internally)
-## Object Destructuring Example:
-```javascript
-const { name } = { name: "Shafi" };
-```
-### Internally:
-```javascript
-const name = obj.name;
-```
-
-
-# Array
+**No parameters:**
 
 ```javascript
-const [first, second] = [10, 20];
+const greet = () => "Hi";
 ```
 
-## Internally:
+**Multiple statements require return:**
 
-- `first = arr[0];`
-- `second = arr[1];`
-
-## 8. Object Methods (Important Behavior)
-
-- `Object.keys(obj);`
-- `Object.values(obj);`
-- `Object.entries(obj);`
-
-## Key Insight
-
-`Object.entries(obj);`
-
-Returns:
-
-```json
-[
-  [key, value],
-  [key, value]
-]
+```javascript
+const calc = (a, b) => {
+    const sum = a + b;
+    return sum;
+};
 ```
 
-Useful for loops.
+# Undefined vs Null
 
-## Freeze vs Seal
+## Undefined
 
-- `Object.freeze(obj);`
-  - No add, delete, update.
-- `Object.seal(obj);`
-  - Can update existing properties.
-  - Cannot add or delete properties.
+JavaScript could not find a value.
 
-
-# 9. Undefined vs Null (Clear Difference)
-
-**Undefined (automatic)**
 ```javascript
 let x;
 console.log(x); // undefined
 ```
 
-**Null (intentional)**
+**Examples:**
+- `obj.name`       // property does not exist
+- `arr[100]`       // out of bound index
+
+## Null
+
+Intentionally assigned empty value.
+
 ```javascript
-let x = null;
+let user = null;
 ```
 
-## Mental Model
-| Type       | Meaning                     |
-|------------|------------------------------|
-| undefined  | value not assigned          |
-| null       | value intentionally empty   |
+## Truthy and Falsy Values
 
-# 10. Truthy vs Falsy (Core Logic)
-JavaScript converts values → Boolean in conditions:
-```javascript
-if (value) { }
-```
+**Falsy values:**
+- `false`
+- `0`
+- `""`
+- `null`
+- `undefined`
+- `NaN`
 
-## Falsy Values
-- false
-- 0
-- ""
-- null
-- undefined
-- NaN
+Everything else is truthy.
 
-*Everything else → truthy*
+**Examples:**
+- `"0"`       // true
+- `' '`       // true (note: space character)
+- `[]`        // true (empty array)
+- `{}`        // true (empty object)
 
-# 11. == Deep Explanation (Most Important)
-## Core Idea
-`==` triggers type coercion.
+## Loose Equality (`==`) Confusions
 
-## Step-by-Step Mental Model
-When JS sees:
-```javascript
-a == b;
-```
-it follows:
-1. **Are types same?**
-   - Yes → compare directly.
-2. **If different:**
-   - Convert both to number (mostly).
-3. **If object involved:**
-   - Convert object → primitive.
-4. **Compare again.**
+defines that == performs automatic type conversion before comparison.
 
-
-# Case 1: Primitive Conversion
-
-2 == "2"
-
-## Steps:
-
-- "2" → Number → 2
-- 2 == 2 → true
-- 1 == true
-- true → 1
-- 1 == 1 → true
-
-# Case 2: Special Rule
-null == undefined → true
-
-*Only case where no conversion rule applies.*
-
-# Case 3: Object Conversion
-[] == ""
-
-## Steps:
-
-- [] → ""
-- "" == "" → true
-- [3] == "3"
-- [3] → "3"
-- "3" == "3" → true
-- [2,4] == "24"
-- [2,4] → "2,4"
-- "2,4" != "24" → false
-
-# Case 4: Object vs Object
-{} == {} → false
-
-*Because:*
-*Different memory reference*
-
-# Case 5: NaN
-NaN == NaN → false
-*Why?*
-NaN is defined as:
-> *"Not equal to anything, including itself"*
-
-
-# Summary Table
-
-| Expression | Result | Reason |
-|--------------|---------|---------|
-| `2 == "2"` | true | string → number |
-| `1 == true` | true | boolean → number |
-| `"1" == true` | true | boolean → number |
-| *both* | 1 | null == undefined, special rule |
-| `NaN == NaN` | false | special rule |
-| `[] == ""` | true | [] → "" |
-| `[3] == "3"` | true | [3] → "3" |
-| `[2,4] == "24"` | false | "2,4" ≠ "24" |
-| `{ } == { }` | false | reference |
-
-## Important Notes
-
-- `==` is predictable, but requires deep understanding.
-- `===` is safe and recommended.
-
-```js
-// Example:
-2 === "2" // false
-```
-
-## Common Mistakes
-
-- Using `==` in conditions.
-- Not understanding reference copying.
-- Misusing `isNaN()`.
-- Forgetting default parameters.
-- Expecting objects to compare by value.
-
-## Key Takeaways
-
-- Always prefer `===`.
-- Understand type coercion rules, not just memorize results.
-- Use spread operator to avoid mutation bugs.
-- Learn reference vs. value deeply.
-- Think step-by-step how JavaScript evaluates expressions.
+| Expression | Result |
+|------------|---------|
+| 2 == "2"           | true |
+| 1 == true          | true |
+| 0 == false         | true |
+| "1" == true        | true |
+| "0" == false       | true |
+| null == undefined  | true |
+| NaN == NaN         | false |
+| [] == ""           | true |
+| `[3]` == "3"         | true |
+| `[2,4]` == "24"      | false |
+| `{}` == `{}`           | false |
+due to type coercion.
+ 
+**Recommendation:** Prefer strict equality (`===`) and inequality (`!==`).
+defines that !== because no automatic type conversion occurs.
