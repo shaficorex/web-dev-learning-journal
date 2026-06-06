@@ -176,7 +176,74 @@ arr.sort();
 ```javascript
 [10, 2, 5].sort(); // [10, 2, 5]
 ```
+<details>
+    <summary><b>How does (a, b) => a - b work?</b></summary>
 
+    # Sorting Numbers in JavaScript
+
+## Take Two Numbers at a Time
+
+- Compare two numbers `a` and `b`.
+- If the result is negative (`a - b < 0`), then **`a` comes before `b`**.
+- If the result is positive (`a - b > 0`), then **`a` comes after `b`**.
+- If the result is zero (`a - b = 0`), their order stays the same.
+
+## Examples:
+
+### When Result is Negative:
+
+```plaintext
+2 - 5 = -3
+```
+
+*Negative, so:* 
+
+**2 comes before 5**
+
+### When Result is Positive:
+
+```plaintext
+10 - 2 = 8
+```
+
+*Positive, so:* 
+
+**10 comes after 2**
+
+### When Result is Zero:
+
+```plaintext
+e.g.,
+5 - 5 = 0
+```
+
+*Their order stays the same.*
+
+## Sorting in Ascending Order:
+```javascript
+arr.sort((a, b) => a - b);
+```
+Result:
+```json
+[2, 5, 10]
+```
+
+## Sorting in Descending Order:
+```javascript
+arr.sort((a, b) => b - a);
+```
+Result:
+```json
+[10, 5, 2]
+```
+
+## Quick Memory Trick:
+- `a - b`: Small to Large order.
+- `b - a`: Large to Small order.
+
+> **Note:** Whenever you sort numbers in JavaScript, always use a compare function. Using just `sort()` without it is usually only safe for strings.
+
+</details>
 **Correct numeric sorting:**
 
 ```javascript
