@@ -147,7 +147,7 @@ console.log(num); // original array is modified
 
 # Combining Arrays
 ```javascript
-console.log(num.concat(mixedArray));
+console.log(num.concat(mixedArray));  //it returns a new array
 ```
 
 # Converting to String
