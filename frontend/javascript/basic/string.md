@@ -167,6 +167,10 @@ console.log(rev);
 depends on splitting the string into an array, reversing it, then joining back into a string.
 does only work with arrays for reversal.
 
+Note: reverse function only can be use in an array not in string.
+Note:we can split a strin g not an array
+Note: we can join an array not a string
+
 
 
 # Step-by-Step Logic (Reverse Using Built-in)
