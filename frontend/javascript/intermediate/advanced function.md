@@ -153,10 +153,11 @@ This enables powerful patterns such as closures, callbacks, and flexible argumen
 ## Explanation
 ### 1. Nested Functions and Scope
 ```javascript
-def outerFunction() {
-    def innerFunction() {
+function outerFunction() {
+    function innerFunction() {
         console.log("this is inner function");
     }
+
     return innerFunction;
 }
 
