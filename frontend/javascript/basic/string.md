@@ -137,14 +137,14 @@ const sen = "i do not like coding";
 console.log(sen.split(" ")); // ['i', 'do', 'not', 'like', 'coding']
 console.log(sen.split('o')); // ['i d', ' n', 't like c', 'ding']
 ```
-*`split(delimiter)`* converts a string into an array based on the delimiter.
+*`split(delimiter)`* converts a string into an array based on the delimiter.we have to use a variable to store the output
 
 ## 7. Joining Arrays into Strings
 ```javascript
 const newarr = ['i', 'do', 'not', 'like', 'coding'];
 console.log(newarr.join('-')); // "i-do-not-like-coding"
 ```
-*`join(delimiter)`* converts an array into a string with elements separated by the delimiter.
+*`join(delimiter)`* converts an array into a string with elements separated by the delimiter. we have to use a variable to store the output
 
 ## 8. Reversing a String
 ### Method 1: Manual Loop
