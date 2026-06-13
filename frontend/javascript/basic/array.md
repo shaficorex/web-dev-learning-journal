@@ -176,6 +176,46 @@ arr.sort();
 ```javascript
 [10, 2, 5].sort(); // [10, 2, 5]
 ```
+
+```javascript
+// Before sorting
+heights = [1, 1, 4, 2, 1, 3];
+ex      = [1, 1, 4, 2, 1, 3];
+
+// After sorting
+ex.sort((a, b) => a - b);
+
+heights = [1, 1, 4, 2, 1, 3];
+ex      = [1, 1, 1, 2, 3, 4];
+
+//sort() modifies the original array and also returns the same array reference.
+```
+
+# Why [...heights]?
+
+```javascript
+let ex = [...heights];
+```
+
+creates a new array:
+
+```javascript
+heights = [1, 1, 4, 2, 1, 3]
+ex      = [1, 1, 4, 2, 1, 3]
+```
+
+Then sorting `ex` does not affect `heights`.
+
+```javascript
+ex.sort((a,b) => a - b);
+```
+
+After sorting `ex`, the arrays are:
+
+```javascript
+heights = [1, 1, 4, 2, 1, 3]
+ex      = [1, 1, 1, 2, 3, 4]
+```
 <details>
     <summary><b>How does (a, b) => a - b work?</b></summary>
 
